@@ -120,7 +120,7 @@ from natal.config import Display, Config, Orb
 # adjust which celestial bodies to display
 display = Display(
     mc = False,
-    asc_node = False,
+    north_node = False,
     chiron = True
 )
 
