@@ -54,6 +54,11 @@ class Chart(DotDict):
         self.height = height
         if self.height is None:
             self.height = self.width
+        
+        # For synastry charts, re-normalize data2's bodies relative to data1's Ascendant
+        # This ensures Person 2's planets are positioned correctly on the wheel
+        if self.data2 is not None:
+            self.data2.set_normalized_degrees(reference_asc=self.data1.asc.degree)
         self.cx = self.width / 2
         self.cy = self.height / 2
 

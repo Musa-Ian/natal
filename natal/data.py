@@ -140,11 +140,18 @@ class Data(DotDict):
         body_pairs = pairs(self.aspectables)
         self.aspects = self.calculate_aspects(body_pairs)
 
-    def set_normalized_degrees(self) -> None:
-        """Normalize the positions of celestial bodies relative to the first house."""
+    def set_normalized_degrees(self, reference_asc: float | None = None) -> None:
+        """Normalize the positions of celestial bodies relative to the reference Ascendant.
+        
+        Args:
+            reference_asc: Optional external Ascendant degree to normalize against.
+                          For synastry, this would be Person 1's Ascendant.
+                          If None, uses this chart's own Ascendant (default behavior).
+        """
+        ref = reference_asc if reference_asc is not None else self.asc.degree
         bodies = self.signs + self.planets + self.extras + self.vertices + self.houses
         for body in bodies:
-            body.normalized_degree = self.normalize(body.degree)
+            body.normalized_degree = (body.degree - ref + 360) % 360
 
     def set_rulers(self) -> None:
         """Set the rulers for each house."""
