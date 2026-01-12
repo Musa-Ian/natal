@@ -151,7 +151,10 @@ class Data(DotDict):
         ref = reference_asc if reference_asc is not None else self.asc.degree
         bodies = self.signs + self.planets + self.extras + self.vertices + self.houses
         for body in bodies:
-            body.normalized_degree = (body.degree - ref + 360) % 360
+            # CRITICAL FIX: Use absolute_position if set (from synastry service)
+            # This prevents Person 1's ascendant from being normalized to 0
+            source_degree = getattr(body, 'absolute_position', body.degree)
+            body.normalized_degree = (source_degree - ref + 360) % 360
 
     def set_rulers(self) -> None:
         """Set the rulers for each house."""
