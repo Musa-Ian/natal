@@ -57,11 +57,16 @@ class Chart(DotDict):
         
         # Normalize all charts here - this is the single point of normalization
         # data1 (inner chart): normalizes to its own Ascendant
+        print(f"[FORK DEBUG] Before norm - data1.asc.degree: {self.data1.asc.degree:.2f}")
         self.data1.set_normalized_degrees(reference_asc=self.data1.asc.degree)
+        print(f"[FORK DEBUG] After norm - data1.asc.normalized_degree: {self.data1.asc.normalized_degree:.2f}")
         
         # data2 (outer chart): normalizes to data1's Ascendant for synastry overlay
         if self.data2 is not None:
+            print(f"[FORK DEBUG] Before norm - data2.asc.degree: {self.data2.asc.degree:.2f}")
             self.data2.set_normalized_degrees(reference_asc=self.data1.asc.degree)
+            print(f"[FORK DEBUG] After norm - data2.asc.normalized_degree: {self.data2.asc.normalized_degree:.2f}")
+            print(f"[FORK DEBUG] Expected: ({self.data2.asc.degree:.2f} - {self.data1.asc.degree:.2f}) % 360 = {(self.data2.asc.degree - self.data1.asc.degree + 360) % 360:.2f}")
         self.cx = self.width / 2
         self.cy = self.height / 2
 
