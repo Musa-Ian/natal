@@ -439,11 +439,13 @@ class Chart(DotDict):
             A list of SVG elements representing the body wheel
         """
 
+        # Use pre-computed normalized_degree - DO NOT re-normalize here!
+        # For synastry, data2's bodies are already normalized to data1's Asc
         def norm_deg(x):
-            return self.data1.normalize(x.degree)
+            return x.normalized_degree
 
         sorted_norm_bodies = sorted(data.aspectables, key=norm_deg)
-        sorted_norm_degs = [norm_deg(b) for b in sorted_norm_bodies]
+        sorted_norm_degs = [b.normalized_degree for b in sorted_norm_bodies]
 
         # Calculate adjusted positions
         adj_norm_degs = (
@@ -469,8 +471,8 @@ class Chart(DotDict):
 
             symbol_radius = wheel_radius + (self.ring_thickness / 2)
 
-            # Use original angle for line start position
-            original_angle = radians(self.data1.normalize(body.degree))
+            # Use pre-computed normalized_degree for line start position
+            original_angle = radians(body.normalized_degree)
             degree_x = self.cx - wheel_radius * cos(original_angle)
             degree_y = self.cy + wheel_radius * sin(original_angle)
 
@@ -539,8 +541,9 @@ class Chart(DotDict):
         ]
         aspect_lines = []
         for aspect in aspects:
-            start_angle = radians(self.data1.normalize(aspect.body1.degree))
-            end_angle = radians(self.data1.normalize(aspect.body2.degree))
+            # Use pre-computed normalized_degree for aspect line endpoints
+            start_angle = radians(aspect.body1.normalized_degree)
+            end_angle = radians(aspect.body2.normalized_degree)
             orb_config = self.config.orb[aspect.aspect_member.name]
             if not orb_config:
                 continue
