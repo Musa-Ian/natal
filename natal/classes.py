@@ -14,6 +14,7 @@ class MovableBody(Body):
     degree: float = 0
     speed: float = 0
     normalized_degree: float = 0
+    absolute_position: float | None = None  # For synastry: explicit position to use during normalization
 
     @property
     def signed_deg(self) -> int:
